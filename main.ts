@@ -47,6 +47,7 @@ let goal: Sprite = null
 let start: Sprite = null
 let avatar: Sprite = null
 scene.setBackgroundImage(assets.image`background`)
+info.setScore(0)
 let shadow = sprites.create(assets.image`shadow`, SpriteKind.Player)
 controller.moveSprite(shadow, 100, 0)
 shadow.y = 106
