@@ -48,6 +48,8 @@ let start: Sprite = null
 let avatar: Sprite = null
 scene.setBackgroundImage(assets.image`background`)
 info.setScore(0)
+let arrow = sprites.create(assets.image`arrow`, SpriteKind.decoration)
+arrow.setPosition(35, 71)
 let shadow = sprites.create(assets.image`shadow`, SpriteKind.Player)
 controller.moveSprite(shadow, 100, 0)
 shadow.y = 106
