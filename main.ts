@@ -1,6 +1,19 @@
 namespace SpriteKind {
     export const decoration = SpriteKind.create()
     export const goal = SpriteKind.create()
+    export const PortalIn = SpriteKind.create()
+    export const PortalOut = SpriteKind.create()
+}
+function spawnBall () {
+    projectil = sprites.createProjectileFromSprite(assets.image`ball`, start, 20, 0)
+    projectil.ay = acel
+    animation.runMovementAnimation(
+    start,
+    animation.animationPresets(animation.shake),
+    200,
+    false
+    )
+    music.play(music.createSoundEffect(WaveShape.Sine, 5000, 1, 213, 44, 878, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.InBackground)
 }
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Player, function (sprite, otherSprite) {
     if (avatar.bottom > sprite.bottom) {
@@ -15,6 +28,9 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         avatar.ay = acel
     }
     console.log(avatar.bottom)
+})
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.PortalIn, function (sprite, otherSprite) {
+    sprite.setPosition(portal_out.x, portal_out.y)
 })
 info.onScore(3, function () {
     pause(1000)
@@ -38,7 +54,6 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.goal, function (sprite, othe
 })
 sprites.onCreated(SpriteKind.Projectile, function (sprite) {
     proyectiles.push(sprite)
-    music.play(music.createSoundEffect(WaveShape.Sine, 5000, 1, 213, 44, 878, SoundExpressionEffect.None, InterpolationCurve.Logarithmic), music.PlaybackMode.InBackground)
 })
 let projectil: Sprite = null
 let proyectiles: Sprite[] = []
@@ -46,10 +61,15 @@ let acel = 0
 let goal: Sprite = null
 let start: Sprite = null
 let avatar: Sprite = null
+let portal_out: Sprite = null
 scene.setBackgroundImage(assets.image`background`)
 info.setScore(0)
 let arrow = sprites.create(assets.image`arrow`, SpriteKind.decoration)
 arrow.setPosition(35, 71)
+let portal_in = sprites.create(assets.image`portal in`, SpriteKind.PortalIn)
+portal_in.setPosition(49, 25)
+portal_out = sprites.create(assets.image`portal out`, SpriteKind.PortalOut)
+portal_out.setPosition(128, 25)
 let shadow = sprites.create(assets.image`shadow`, SpriteKind.Player)
 controller.moveSprite(shadow, 100, 0)
 shadow.y = 106
@@ -112,14 +132,7 @@ forever(function () {
 })
 game.onUpdateInterval(500, function () {
     if (proyectiles.length < 3) {
-        animation.runMovementAnimation(
-        start,
-        animation.animationPresets(animation.shake),
-        200,
-        false
-        )
-        projectil = sprites.createProjectileFromSprite(assets.image`ball`, start, 20, 0)
-        projectil.ay = acel
+        spawnBall()
     }
 })
 game.onUpdateInterval(200, function () {
